@@ -33,6 +33,10 @@ export default {
     .roomListPage{
         position: absolute;
         top: 60vh;
+        width: 100%;
+        @include s768{
+            top: 70vh;
+        }
     }
 
     .roomList{
@@ -49,12 +53,22 @@ export default {
             margin: 2% 1.5%;
             overflow: hidden;
             position: relative;
+            @include s768{
+                width: 46%;
+                margin: 2%;
+            }
+            @include s630{
+                width: 90%;
+                margin: 5% 0;
+            }
         }
         img{
             height: 100%;
             width: auto;
             min-height: 100%;
             min-width: 100%;
+            position: absolute;
+            bottom: 70px;
         }
     }
     .roomInfo{

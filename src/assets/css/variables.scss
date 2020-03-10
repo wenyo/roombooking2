@@ -66,11 +66,15 @@ $letter-spc-auto: auto;
     }
 };
 
+@mixin s630 {
+    @media (max-width: 630px) {
+        @content
+    }
+};
+
 @mixin s420 {
     @media (max-width: 420px) {
         @content
     }
 };
-
-
 
