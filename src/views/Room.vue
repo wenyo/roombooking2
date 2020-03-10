@@ -1,6 +1,7 @@
 <template>
     <div>
         room
+        {{this.$route.params.num}}
         <RoomImg></RoomImg>
         <RoomDetail></RoomDetail>
     </div>
