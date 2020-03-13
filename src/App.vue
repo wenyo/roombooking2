@@ -3,27 +3,24 @@
     <router-view />
   </div>
 </template>
-
 <script>
 import { mapActions } from 'vuex';
 
 export default {
-  created(){
-    this.getAllRoom();
-  },
-  methods:{
-    ...mapActions(['getAllRoom'])
-  }
+    created(){
+        this.getAllRoom();
+    },
+    methods:{
+        ...mapActions(['getAllRoom'])
+    }
 }
 </script>
-
 <style lang="scss">
   /*-------BASIC SETTING-------*/
 
   *{
       @include fixSizing;
       font-family: NotoSansCJKtc-DemiLight;
-      color: $color-master;
   }
 
   .homePage{

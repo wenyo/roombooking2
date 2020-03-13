@@ -10,7 +10,7 @@ import Header from '../components/Home/Header'
 import RoomList from '../components/Home/RoomList'
 
 export default {
-    components:  { Header, RoomList }
+    components:  { Header, RoomList },
 }
 </script>
 <style lang="scss">

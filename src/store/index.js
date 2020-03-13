@@ -18,26 +18,57 @@ export default new Vuex.Store({
 
     // ALL ROOM DATAS
     bGetAllData: false,
-    allRoomData: [],
+    bGetAllDetails: false,
+    vAllRoomData: [],
+    vRoomDetail: []
   },
   mutations: {
     addAllRoomData(state, data){
-      console.log(data)
-        state.allRoomData = data;
+        state.vAllRoomData = data;
         state.bGetAllData = true;
+    },
+    getRoomDetailArray(state, {res, idx}){
+      state.vRoomDetail[idx] = res.data.room[0];
+      let len = state.vRoomDetail.filter( vRoom => vRoom !== null).length;
+      state.bGetAllDetails = state.vAllRoomData.length == len;
     }
   },
   actions: {
-    getAllRoom({ commit, state }){
-      axios.get( state.URL_AJAX,{
+    // 得到房間概略資料
+    getAllRoom({ commit, state, dispatch }){
+      return axios.get( state.URL_AJAX,{
         headers: {
             'Authorization': state.VUE_APP_TOKEN,
             'Accept': 'application/json'
         }
       })
       .then(res => {
-        commit('addAllRoomData', res.data.items)
+        commit('addAllRoomData', res.data.items);
+        for (const idx in state.vAllRoomData) {
+          let id = state.vAllRoomData[idx].id;
+          dispatch('getRoomDetail', {idx, id})
+        }
       })
+      .catch( error => {
+        console.warn(error);
+      })
+    },
+    // 得到個別房間細節資料
+    getRoomDetail({ commit, state }, {idx, id}){
+      const URL_DETAIL = state.URL_AJAX_SLASH + id;
+      return axios.get( URL_DETAIL, {
+          headers: {
+              'Authorization': state.VUE_APP_TOKEN,
+              'Accept': 'application/json'
+          }
+      })
+      // 回傳 Response 物件
+      .then(res => {
+          commit('getRoomDetailArray', {res, idx});
+        })
+      .catch( error => {
+          console.warn(error);
+      });
     }
   },
   modules: {}

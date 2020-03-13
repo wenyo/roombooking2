@@ -48,23 +48,19 @@ export default {
         }
     },
     computed:{
-        ...mapState([ 'allRoomData', 'bGetAllData' ])
+        ...mapState([ 'vAllRoomData', 'bGetAllData' ])
     },
     methods:{
         getBanner(){
-            const len = this.allRoomData.length;
+            const len = this.vAllRoomData.length;
             const idx = Math.floor(Math.random()*len);
-            this.bannerImg = this.allRoomData[idx].imageUrl;
-            console.log(this.bannerImg);
+            this.bannerImg = this.vAllRoomData[idx].imageUrl;
         }
     },
     watch:{
         bGetAllData(){
             if(this.bGetAllData){
-                console.log("!")
                 this.getBanner();
-            }else{
-                console.log('?')
             }
         }
     }
@@ -89,8 +85,7 @@ export default {
         bottom: 15vh;
         right:0;
         left:0;
-        background: $color-ten;
-        background: linear-gradient(180deg, $color-sec 0%, $color-thir 50%);
+        background: linear-gradient(180deg, $color-sec 0%, $color-thir 100%);
         z-index: -1;
     }
 
@@ -140,6 +135,7 @@ export default {
         width: 148px;
         height: 148px;
         border: 2px solid $color-master;
+        color: $color-master;
         h1{
             font-family: NotoSansCJKtc-Medium;
             font-size: $fontsize-xl;
@@ -172,6 +168,7 @@ export default {
         display: flex;
         flex-direction: row;
         margin-top: 20px;
+        color: $color-master
     }
 
     .socialMedia{

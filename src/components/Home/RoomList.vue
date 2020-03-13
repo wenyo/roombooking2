@@ -3,7 +3,7 @@
         <div class="content">
 
             <ul class='roomList'>
-                <li v-for='( vRoom, idx ) in allRoomData' :key='idx' class='room'>
+                <li v-for='( vRoom, idx ) in vAllRoomData' :key='idx' class='room'>
                     <router-link :to='`/room/${idx}`'>
                     <img :src='vRoom.imageUrl'>
                     <div class="roomInfo">
@@ -24,7 +24,7 @@
 import { mapState } from 'vuex';
 export default {
     computed:{
-        ...mapState([ 'allRoomData', 'bGetAllData' ])
+        ...mapState([ 'vAllRoomData', 'bGetAllData' ]),
     },
 }
 </script>
@@ -53,7 +53,7 @@ export default {
             margin: 2% 1.5%;
             overflow: hidden;
             position: relative;
-            @include s768{
+            @include s900{
                 width: 46%;
                 margin: 2%;
             }
@@ -77,6 +77,7 @@ export default {
         position: absolute;
         bottom: 0;
         background: $color-egh;
+        font-size: $fontsize-xs;
         transition: all .3s;
         div{
             color: $color-nine;
@@ -85,12 +86,12 @@ export default {
             font-size: $fontsize-xs;
             color: $color-ele;
         }
+        .normalDayPrice{
+            font-size: $fontsize-m;
+        }
     }
     .day{
         margin-left: 5px;
-    }
-    .normalDayPrice{
-        font-size: $fontsize-m;
     }
     .price{
         display:none;
