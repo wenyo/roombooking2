@@ -26,14 +26,18 @@ export default {
             id: this.$route.params.id,
             iTotalImg: 0,
             iThisRoom: [],
-            iImg: -1
+            iImg: -1,
         }
     },
     computed:{
         ...mapState([ 'vRoomDetail', 'bGetAllDetails']),
     },
     created(){
-        this.getRoomDetail()
+        this.getRoomDetail();
+        document.addEventListener('keyup', this.listerKeyEvent);
+    },
+    destroyed(){
+        document.removeEventListener('keyup', this.listerKeyEvent);
     },
     methods:{
         // 得到顯示圖片
@@ -56,6 +60,17 @@ export default {
             if(this.bGetAllDetails){
                 this.iThisRoom = this.vRoomDetail[this.id];
                 this.iTotalImg = this.iThisRoom.imageUrl.length;                
+            }
+        },
+        // 按鍵監聽
+        listerKeyEvent(e){
+            if(this.iImg == -1) return;
+            if(e.keyCode == 39) {
+                this.changePage(1);
+            }else if(e.keyCode == 37){
+                this.changePage(-1);
+            }else if(e.keyCode == 27){
+                this.closeLightBox();
             }
         }
     },
