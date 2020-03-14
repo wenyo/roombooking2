@@ -47,21 +47,24 @@ export default {
             bannerImg: '',
         }
     },
+    created(){
+        this.getBanner();
+    },
     computed:{
         ...mapState([ 'vAllRoomData', 'bGetAllData' ])
     },
     methods:{
         getBanner(){
-            const len = this.vAllRoomData.length;
-            const idx = Math.floor(Math.random()*len);
-            this.bannerImg = this.vAllRoomData[idx].imageUrl;
+            if(this.bGetAllData){
+                const len = this.vAllRoomData.length;
+                const idx = Math.floor(Math.random()*len);
+                this.bannerImg = this.vAllRoomData[idx].imageUrl;
+            }
         }
     },
     watch:{
         bGetAllData(){
-            if(this.bGetAllData){
-                this.getBanner();
-            }
+            this.getBanner();
         }
     }
 }

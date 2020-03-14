@@ -1,10 +1,10 @@
 <template>
     <div>
-        <a href="/" class="logo logoBlack font-medium">
+        <router-link to='/' class="logo logoBlack font-medium"> 
             <div class="lineDirectionBlack top-line"></div>
             <div class="lineDirectionBlack left-line"></div>
             <h1>White Space</h1>
-        </a>
+        </router-link>
     </div>
 </template>
 <style lang="scss" scoped>

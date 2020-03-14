@@ -1,6 +1,6 @@
 <template>
-    <div class='imgTeam' v-if='bGetAllDetails'>
-        <div v-for='( val, idx ) in vThisRoom.imageUrl' :key='idx' @click='getShowImg(idx)'>
+    <div class='imgTeam'>
+        <div v-for='( val, idx ) in getImgArray()' :key='idx' @click='getShowImg(idx)'>
             <img :src="val">
         </div>
     </div>
@@ -36,6 +36,13 @@ export default {
         },
         getShowImg(imgIdx){
             this.$emit('iShowImg', imgIdx)
+        },
+        getImgArray(){
+            if(this.bGetAllDetails){
+                return this.vThisRoom.imageUrl
+            }else{
+                return [];
+            }
         }
     }
 }
@@ -49,7 +56,7 @@ export default {
         position: absolute;
         top: 0;
         left: 0;
-
+        background: $color-sev;
         display: inline-flex;
         flex-direction: column;
         flex-wrap: wrap;

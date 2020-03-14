@@ -101,7 +101,9 @@ export default {
         justify-content: center;
         align-items: center;
         img{
-            width: 50vw;
+            max-height: 90vh;
+            min-width: auto;
+            max-width: 50vw;
             height: auto;
         }
     }
