@@ -28,7 +28,7 @@ export default new Vuex.Store({
         state.bGetAllData = true;
     },
     getRoomDetailArray(state, {res, idx}){
-      state.vRoomDetail[idx] = res.data.room[0];
+      state.vRoomDetail[idx] = res.data;
       let len = state.vRoomDetail.filter( vRoom => vRoom !== null).length;
       state.bGetAllDetails = state.vAllRoomData.length == len;
     }
@@ -44,10 +44,7 @@ export default new Vuex.Store({
       })
       .then(res => {
         commit('addAllRoomData', res.data.items);
-        for (const idx in state.vAllRoomData) {
-          let id = state.vAllRoomData[idx].id;
-          dispatch('getRoomDetail', {idx, id})
-        }
+        dispatch('getAllRoomDetail');
       })
       .catch( error => {
         console.warn(error);
@@ -69,6 +66,30 @@ export default new Vuex.Store({
       .catch( error => {
           console.warn(error);
       });
+    },
+    // 得到所有房間細節
+    getAllRoomDetail({ state, dispatch }){
+      for (const idx in state.vAllRoomData) {
+        let id = state.vAllRoomData[idx].id;
+        dispatch('getRoomDetail', {idx, id})
+      }
+    },
+    // 預約房型
+    bookRoom({ state, dispatch },{id, name, tel, date}){
+      const URL_BOOKING = state.URL_AJAX_SLASH + id;
+      return axios.post( URL_BOOKING, {
+        name,
+        tel,
+        date
+      },{
+        headers: {
+          'Authorization': state.VUE_APP_TOKEN,
+          'Accept': 'application/json'
+        }
+      })
+      .then( () => {
+        dispatch('getAllRoomDetail');
+      })
     }
   },
   modules: {}

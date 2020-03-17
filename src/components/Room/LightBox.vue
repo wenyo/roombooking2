@@ -6,7 +6,7 @@
         <div class="imgBlock">
             <img :src="getImgUrl(iImg)">
             <div class="imgNote font-medium">
-                <div class="name">{{iThisRoom.name}}</div>
+                <div class="name">{{vThisRoom.name}}</div>
                 <div class="page">{{iImg+1}}/{{iTotalImg}}</div>
             </div>
         </div>
@@ -25,7 +25,7 @@ export default {
         return{
             id: this.$route.params.id,
             iTotalImg: 0,
-            iThisRoom: [],
+            vThisRoom: [],
             iImg: -1,
         }
     },
@@ -42,7 +42,7 @@ export default {
     methods:{
         // 得到顯示圖片
         getImgUrl(imgIdx){
-            return this.iThisRoom.imageUrl[imgIdx];
+            return this.vThisRoom.imageUrl[imgIdx];
         },
         // 關掉視窗
         closeLightBox(){
@@ -58,8 +58,8 @@ export default {
         // 得到這間房間的資訊
         getRoomDetail(){
             if(this.bGetAllDetails){
-                this.iThisRoom = this.vRoomDetail[this.id];
-                this.iTotalImg = this.iThisRoom.imageUrl.length;                
+                this.vThisRoom = this.vRoomDetail[this.id].room[0];
+                this.iTotalImg = this.vThisRoom.imageUrl.length;                
             }
         },
         // 按鍵監聽
@@ -88,8 +88,8 @@ export default {
 
 <style lang="scss" scoped>
     .lightBox{
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         z-index: 11;
         background: $color-thir;
         position: absolute;

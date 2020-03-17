@@ -4,6 +4,7 @@
         <LogoBlack></LogoBlack>
         <RoomImg @iShowImg='getShowImg'></RoomImg>
         <RoomDetail></RoomDetail>
+        <Canlendar></Canlendar>
     </div>
 </template>
 
@@ -13,11 +14,12 @@ import LogoBlack from '../components/Room/logo_black'
 import LightBox from '../components/Room/LightBox'
 import RoomDetail from '../components/Room/RoomDetail'
 import RoomImg from '../components/Room/RoomImg'
+import Canlendar from '../components/Room/Canlendar'
 
 import { mapState } from 'vuex';
 
 export default {
-    components: { RoomDetail, RoomImg, LogoBlack, LightBox },
+    components: { RoomDetail, RoomImg, LogoBlack, LightBox, Canlendar },
     data(){
         return {
             id: this.$route.params.id,

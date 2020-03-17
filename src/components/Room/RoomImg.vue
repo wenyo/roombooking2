@@ -31,7 +31,7 @@ export default {
     methods:{
         getTisRoom(){
             if(this.bGetAllDetails){
-                this.vThisRoom = this.vRoomDetail[this.id];
+                this.vThisRoom = this.vRoomDetail[this.id].room[0];
             }
         },
         getShowImg(imgIdx){

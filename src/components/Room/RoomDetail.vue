@@ -106,21 +106,25 @@ export default {
         this.getThisRoom();
     },
     mounted(){
-         if(this.bGetAllDetails){
-            this.showPrice();
-         }
+        this.showPrice();
+    },
+    updated(){
+        this.showPrice();
     },
     methods:{
         // 得到該間房間資料
         getThisRoom(){
             if(this.bGetAllDetails){
-                this.vThisRoom = this.vRoomDetail[this.id];
+                this.vThisRoom = this.vRoomDetail[this.id].room[0];
                 this.checkEquipment();
             }
         },
         // 顯示今日價格
         showPrice(){
+            if(!this.bGetAllDetails) return;
+
             const today = new Date().getDay();
+            console.log(this.$refs.regularDay)
             if(today > 1 && today < 6){
                 this.$refs.regularDay.children[0].classList = ['todayPrice'];
             }else{
