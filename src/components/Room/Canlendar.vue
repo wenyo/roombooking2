@@ -17,14 +17,11 @@
             </table>
         </div>
 
-        <span class="bookingBtn" @click='showBookAlert=true'>
+        <span class="bookingBtn" @click='showBookAlert()'>
             <input type="submit" value="預約時段">
             <div class="lineDirectionBlack right-line"></div>
             <div class="lineDirectionBlack bottom-line"></div>
         </span>
-
-        <div class="bookAlert" v-if='showBookAlert'>000</div>
-        <div class="tooltip"></div>
     </div>
 </template>
 
@@ -45,7 +42,6 @@ export default {
             iWeekText:['日', '一','二','三','四','五','六'],
             vMonthDate: [[],[],[],[],[],[]],
             vThisRoomBooking: [],
-            showBookAlert: false
         }
     },
     computed:{
@@ -105,6 +101,10 @@ export default {
             }
 
             this.getMonth(this.iYearShow ,this.iMonthShow);
+        },
+        // 發出顯示預約視窗
+        showBookAlert(){
+            this.$emit('sendBookAlert', true)
         }
     },
     watch:{
@@ -195,14 +195,4 @@ export default {
         }
     }
 
-    // BookAlert
-    .bookAlert{
-        width: 100vw;
-        position: absolute;
-        top: 0vw;
-        bottom: 0vw;
-        right: 0;
-        left: 0;
-        background: $color-thir;
-    }
 </style>

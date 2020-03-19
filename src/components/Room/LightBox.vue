@@ -1,5 +1,5 @@
 <template>
-    <div v-if='iImg > -1' class='lightBox' @click.self="closeLightBox">
+    <div v-if='iImg > -1' class='lightBox'  @click.self="closeLightBox">
         <div class='changeImg' @click='changePage(-1)'>
             <div class="preImg"></div>
         </div>
@@ -90,12 +90,12 @@ export default {
     .lightBox{
         width: 100%;
         height: 100%;
-        z-index: 11;
         background: $color-thir;
-        position: absolute;
+        position: fixed;
         top: 0;
         bottom: 0;
         left: 0;
+        z-index: 11;
         right: 0;
         display: flex;
         justify-content: center;

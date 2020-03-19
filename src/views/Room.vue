@@ -4,7 +4,8 @@
         <LogoBlack></LogoBlack>
         <RoomImg @iShowImg='getShowImg'></RoomImg>
         <RoomDetail></RoomDetail>
-        <Canlendar></Canlendar>
+        <Canlendar @sendBookAlert='getBookAlert'></Canlendar>
+        <BookAlert v-if='bShowBook' @closeAlert='getBookAlert'></BookAlert>
     </div>
 </template>
 
@@ -15,15 +16,17 @@ import LightBox from '../components/Room/LightBox'
 import RoomDetail from '../components/Room/RoomDetail'
 import RoomImg from '../components/Room/RoomImg'
 import Canlendar from '../components/Room/Canlendar'
+import BookAlert from '../components/Room/BookAlert'
 
 import { mapState } from 'vuex';
 
 export default {
-    components: { RoomDetail, RoomImg, LogoBlack, LightBox, Canlendar },
+    components: { RoomDetail, RoomImg, LogoBlack, LightBox, Canlendar, BookAlert },
     data(){
         return {
             id: this.$route.params.id,
             imgIdx: -1,
+            bShowBook: false,
         }
     },
     computed:{
@@ -35,6 +38,9 @@ export default {
         },
         resetShowImg(){
             this.imgIdx = -1;
+        },
+        getBookAlert(bShow){
+            this.bShowBook = bShow;
         }
     }
 }
