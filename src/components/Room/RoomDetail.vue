@@ -117,6 +117,7 @@ export default {
             if(this.bGetAllDetails){
                 this.vThisRoom = this.vRoomDetail[this.id].room[0];
                 this.checkEquipment();
+                console.log(this.vRoomDetail[this.id]);
             }
         },
         // 顯示今日價格
@@ -124,7 +125,6 @@ export default {
             if(!this.bGetAllDetails) return;
 
             const today = new Date().getDay();
-            console.log(this.$refs.regularDay)
             if(today > 1 && today < 6){
                 this.$refs.regularDay.children[0].classList = ['todayPrice'];
             }else{

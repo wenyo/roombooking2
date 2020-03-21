@@ -59,12 +59,12 @@ export default {
     methods:{
         // 得到該月日期陣列
         getMonth(iYearNow, iMonthNow){
+            this.vMonthDate = [[],[],[],[],[],[]]; // reset
             const sMonthFstDate = new Date(iYearNow, iMonthNow, 1);
             const sMonthLastDate = new Date(iYearNow, iMonthNow+1, 0);
             const iMonthNowLen = sMonthLastDate.getDate();
             let iWeekDay = sMonthFstDate.getDay();
             let iWeek = 0;
-            this.vMonthDate = [[],[],[],[],[],[]];
             for(let iDate = 1; iDate <= iMonthNowLen; iDate++){
                 this.vMonthDate[iWeek][iWeekDay] = iDate;
                 iWeekDay++;

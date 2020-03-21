@@ -10,41 +10,41 @@
                 <div class="bookingContent alertContent">
                     <label>
                         <span class='font-medium'>姓名</span>
-                        <input type="text" class='inputStyle'>
+                        <input type="text" class='inputStyle' v-model='sName'>
                     </label>
                     <label>
                         <span class='font-medium'>電話</span>
-                        <input type="text" class='inputStyle'>
+                        <input type="text" class='inputStyle' v-model='sTel'>
                     </label>
                     <label>
                         <span class='font-medium'>預約起迄</span>
                         <div class="timeInput inputStyle">
-                            <input type="date" value='2020-03-20'>
+                            <input type="date" value='2020-03-20' v-model='sTimeStart' :min='sTomorow'>
                             <span>~</span>
-                            <input type="date" value='2020-03-30'>
+                            <input type="date" value='2020-03-30' v-model='sTimeEnd' :min='sTimeStart ? sTimeStart : sTomorow'>
                         </div>
                     </label>
                 </div>
 
                 <div class="calcDay alertContent">
                     <div class="dayStyle">
-                        <span>平日時段</span>
-                        <span class='font-medium'>1夜</span>
+                        <span>平日時段 NT.{{iNormalDayPrice}}</span>
+                        <span class='font-medium'>{{iNormalDays}}夜</span>
                     </div>
                     <div class="dayStyle">
-                        <span>假日時段</span>
-                        <span class='font-medium'>1夜</span>
+                        <span>假日時段 NT.{{iHolidayPrice}}</span>
+                        <span class='font-medium'>{{iHolidays}}夜</span>
                     </div>
                 </div>
 
                 <div class="totalPrice font-medium alertContent">
                     <span>=</span>
-                    <span>NT.1450</span>
+                    <span>NT.{{iTotalPrice}}</span>
                 </div>
 
                 <div class="bookBtn alertContent">
                     <span class="cancel" @click.self='closeAlert'>取消</span>
-                    <span class="submit">確定預約</span>
+                    <span class="submit" @click="submitBooking">確定預約</span>
                 </div>
             </div>
         </div>
@@ -53,17 +53,138 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
+
 export default {
     data(){
         return{
+            id: this.$route.params.id,
+            iRoomId: 0,
+            sName: '',
+            sTel: '',
+            sTimeStart: '',
+            sTimeEnd: '',
+            vTime: [],
+            sTomorow: '',
+            iNormalDays: 0,
+            iHolidays: 0,
+            iHolidayPrice: 0,
+            iNormalDayPrice: 0,
+            iTotalPrice: 0
         }
     },
     created(){
+        this.getRoomId();
+        this.getTomorrow();
+        this.getPrice();
+        console.log(new Date(this.sTomorow).getDay())
+    },
+    computed:{
+        ...mapState(['vRoomDetail']),
     },
     methods:{
+        ...mapActions(['bookRoom']),
+        // close alert
         closeAlert(){
             this.$emit('closeAlert', false);
+        },
+        // calculation vTime between  sTimeStart from sTimeEnd
+        calcDate(){
+            this.vTime = []; //reset
+            const iDuringTimeOut = (new Date(this.sTimeEnd)).valueOf() - (new Date(this.sTimeStart)).valueOf();
+            const iDays = iDuringTimeOut / 1000 / 60 / 60 / 24;
+            let date = new Date(this.sTimeStart);
+            let dateNew;
+            for (let day = 0; day <= iDays; day++) {
+                dateNew = this.addDate(date, day);
+                this.vTime.push(dateNew)
+                this.calcuWeekDays(dateNew);
+            }
+        },
+        // get time string format
+        getTimeString(date){
+            let sDate = date.getDate();
+            sDate =  sDate > 10 ? sDate : '0' + sDate;
+
+            let sMonth = date.getMonth() + 1;
+            sMonth = sMonth > 10 ? sMonth : '0' + sMonth;
+
+            const sYear = date.getFullYear();
+
+            return sYear+ '-' + sMonth+ '-' + sDate;
+        },
+        addDate(date, idays){
+            let dateNew = new Date(date.getFullYear(), date.getMonth(), date.getDate() + idays);
+            return this.getTimeString(dateNew);
+        },
+        // booking room
+        submitBooking(){
+            if( !this.sName ) return;
+            if( !this.sTel ) return;
+            if( !this.sTimeStart || !this.sTimeEnd || this.sTimeEnd < this.sTimeStart ) return;
+
+            const data = {'id': this.iRoomId, 'name': this.sName, 'tel': this.sTel, 'date': this.vTime};
+            this.bookRoom(data)
+            .then(()=>
+                console.log(111)
+            )
+        },
+        getRoomId(){
+            this.iRoomId = this.vRoomDetail[this.id].room[0].id;
+        },
+        getTomorrow(){
+            let today = new Date();
+            this.sTomorow = this.addDate(today, 1);
+            console.log(this.sTomorow);
+        },
+        // calculation weekDay
+        calcuWeekDays(date){
+            let iWeekDays = new Date(date).getDay();
+            console.log(iWeekDays, date)
+            if( iWeekDays > 0 && iWeekDays < 6 ){
+                this.iNormalDays++;
+            }else{
+                this.iHolidays++;
+            }
+        },
+        // reset weekDay
+        resetWeekDays(){
+            this.iNormalDays = 0;
+            this.iHolidays = 0;
+        },
+        getPrice(){
+            this.iHolidayPrice = this.vRoomDetail[this.id].room[0].holidayPrice;
+            this.iNormalDayPrice = this.vRoomDetail[this.id].room[0].normalDayPrice;
+        },
+        calcPrice(){
+            console.log(this.iHolidayPrice, this.iHolidays)
+            console.log(this.iNormalDayPrice, this.iNormalDays)
+            this.iTotalPrice = this.iHolidayPrice * this.iHolidays + this.iNormalDayPrice * this.iNormalDays;
         }
+    },
+    watch:{
+        sName(){
+            console.log(this.sName);
+        },
+        sTel(){
+            console.log(this.sTel);
+        },
+        sTimeEnd(){
+            console.log(this.sTimeEnd);
+            this.resetWeekDays();
+            this.calcDate();
+            this.calcPrice();
+            console.log(this.iNormalDays);
+            console.log(this.iHolidays);
+        },
+        sTimeStart(){
+            this.sTimeEnd = this.sTimeEnd !== '' ? this.sTimeEnd : this.sTimeStart;
+            console.log(this.sTimeStart);
+            this.resetWeekDays();
+            this.calcDate();
+            this.calcPrice();
+            
+        },
     }
 }
 </script>

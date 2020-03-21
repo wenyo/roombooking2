@@ -75,7 +75,13 @@ export default new Vuex.Store({
       }
     },
     // 預約房型
-    bookRoom({ state, dispatch },{id, name, tel, date}){
+    bookRoom({ state, dispatch }, {id, name, tel, date}){
+      // bookRoom({state},{id, name, tel, date}){
+      console.log(state)
+      console.log(id)
+      console.log(name)
+      console.log(tel)
+      console.log(date)
       const URL_BOOKING = state.URL_AJAX_SLASH + id;
       return axios.post( URL_BOOKING, {
         name,
@@ -88,6 +94,7 @@ export default new Vuex.Store({
         }
       })
       .then( () => {
+        console.log(66)
         dispatch('getAllRoomDetail');
       })
     }
