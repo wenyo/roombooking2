@@ -60,8 +60,10 @@ export default {
         display: inline-flex;
         flex-direction: column;
         flex-wrap: wrap;
-
         @include over-hidden;
+        @include s630{
+            flex-direction: row;
+        }
         img{
             position: absolute;
             bottom: -20%;
@@ -76,9 +78,16 @@ export default {
             @include over-hidden;
             @include pointer;
             transition: all .5s;
+            @include s630{
+                width: 50%;
+            }
             &:first-child{
                 width: 70%;
                 height: 100%;
+                @include s630{
+                    width: 100%;
+                    height: 50%;
+                }
                 img{
                     bottom: 0;
                 }

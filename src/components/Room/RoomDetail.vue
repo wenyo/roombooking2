@@ -117,7 +117,6 @@ export default {
             if(this.bGetAllDetails){
                 this.vThisRoom = this.vRoomDetail[this.id].room[0];
                 this.checkEquipment();
-                console.log(this.vRoomDetail[this.id]);
             }
         },
         // 顯示今日價格
@@ -238,7 +237,7 @@ export default {
 
         position: absolute;
         top: 0;
-        right: 0;
+        right: 20px;
 
         display: inline-flex;
         flex-direction: column;

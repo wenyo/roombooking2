@@ -12,7 +12,9 @@
                     <td v-for='(sWeek, idx) in iWeekText' :key='idx'>{{sWeek}}</td>
                 </tr>
                 <tr v-for='(vWeek, idx2) in vMonthDate' :key='idx2'>
-                    <td v-for='(iDate, idx3) in vWeek' :key='idx3' :class="checkDate(iDate)">{{iDate}}</td>
+                    <td v-for='(iDate, idx3) in vWeek' :key='idx3' 
+                    :class="checkDate(iDate)"
+                >{{iDate}}</td>
                 </tr>
             </table>
         </div>
@@ -30,6 +32,7 @@
 import { mapState } from 'vuex';
 
 export default {
+    props: ['addDate'],
     data(){
         return{
             id: this.$route.params.id,
@@ -76,9 +79,17 @@ export default {
         },
         // 得到該間房間的訂房狀況
         getRoomBooking(){
+            this.vThisRoomBooking = [];
             if(this.bGetAllDetails){
-                this.vThisRoomBooking = this.vRoomDetail[this.id].booking;
+                let vBooking = this.vRoomDetail[this.id].booking;
+                for (const vBook of vBooking) {
+                    this.add_vThisRoomBooking(vBook.date)
+                }
             }
+        },
+        // vThisRoomBooking 得到 date
+        add_vThisRoomBooking(date){
+            this.vThisRoomBooking.push(date);
         },
         // 得到時間戳記
         getTimeout(iYear, iMonth, iDate){
@@ -86,10 +97,12 @@ export default {
             const iDateTimeout = new Date(sDate).valueOf();
             return iDateTimeout;
         },
-        // 檢查是否為過去日期
+        // 檢查是否為過去日期 && 是否已訂房
         checkDate(iDate){
+            const sDate = this.getDateString(iDate);
             const iCheckdate = this.getTimeout(this.iYearShow, this.iMonthShow, iDate);
             let sClassName = this.iTodayTimeOut < iCheckdate ? '' : 'beforToday';
+            sClassName = this.vThisRoomBooking.indexOf(sDate) > -1 ? sClassName + ' lineDirectionBlack' : sClassName;
             return sClassName;
         },
         // 切換日曆
@@ -105,11 +118,20 @@ export default {
         // 發出顯示預約視窗
         showBookAlert(){
             this.$emit('sendBookAlert', true)
+        },
+        // 得到 date string
+        getDateString(iDate){
+            const sMonth = ((this.iMonthShow + 1) > 10) ? (this.iMonthShow + 1) : ('0' + (this.iMonthShow + 1));
+            const sDate = (iDate > 10) ? iDate : ('0' + iDate);
+            return this.iYearShow + '-' + sMonth + '-' + sDate;
         }
     },
     watch:{
         bGetAllDetails(){
             this.getRoomBooking();
+        },
+        addDate(date){
+            this.add_vThisRoomBooking(date);
         }
     }
 }
@@ -163,12 +185,12 @@ export default {
 
     .bookingBtn{
         position: relative;
-        padding: 20px 0;
+        display: inline-block;
+        margin-top: 26px;
         input{
             border: none;
             font-size: $fontsize-xs;
             padding: 20px 30px;
-            margin-top: 26px;
 
             background-color: $color-nine;
             color: $color-master;
@@ -194,5 +216,8 @@ export default {
             right: 0;
         }
     }
-
+    td.lineDirectionBlack{
+        position: relative;
+        z-index: 0;
+    }
 </style>

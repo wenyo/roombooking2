@@ -51,7 +51,7 @@ export default {
       background: $color-sec;
       background-image: repeating-linear-gradient(
                           45deg, transparent, 
-                          transparent 5px, $color-five 3px, $color-five 6px);
+                          transparent 5px, $color-thir 6px, $color-thir 6px);
       position: absolute;    
       z-index: -1;
   }

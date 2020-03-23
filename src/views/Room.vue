@@ -4,8 +4,11 @@
         <LogoBlack></LogoBlack>
         <RoomImg @iShowImg='getShowImg'></RoomImg>
         <RoomDetail></RoomDetail>
-        <Canlendar @sendBookAlert='getBookAlert'></Canlendar>
-        <BookAlert v-if='bShowBook' @closeAlert='getBookAlert'></BookAlert>
+        <Canlendar @sendBookAlert='getBookAlert'
+                    :add-date='addDate'></Canlendar>
+        <BookAlert v-if='bShowBook' 
+                    @closeAlert='getBookAlert'
+                    @showBookingDate='addBookingDate'></BookAlert>
     </div>
 </template>
 
@@ -27,6 +30,7 @@ export default {
             id: this.$route.params.id,
             imgIdx: -1,
             bShowBook: false,
+            addDate: ''
         }
     },
     computed:{
@@ -41,6 +45,9 @@ export default {
         },
         getBookAlert(bShow){
             this.bShowBook = bShow;
+        },
+        addBookingDate(date){
+            this.addDate = date;
         }
     }
 }

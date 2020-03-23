@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="bookAlert" @click.self='closeAlert'>
+        <div class="bookAlert" @click.self='closeAlert' v-if='bShowBooking'>
             <div>
                 <div class="title alertContent">
                     <div class='font-medium'>預約時段</div>
@@ -28,11 +28,11 @@
 
                 <div class="calcDay alertContent">
                     <div class="dayStyle">
-                        <span>平日時段 NT.{{iNormalDayPrice}}</span>
+                        <span>平日 NT.{{iNormalDayPrice}}</span>
                         <span class='font-medium'>{{iNormalDays}}夜</span>
                     </div>
                     <div class="dayStyle">
-                        <span>假日時段 NT.{{iHolidayPrice}}</span>
+                        <span>假日 NT.{{iHolidayPrice}}</span>
                         <span class='font-medium'>{{iHolidays}}夜</span>
                     </div>
                 </div>
@@ -48,7 +48,31 @@
                 </div>
             </div>
         </div>
-        <div class="tooltip"></div>
+        <div class="tooltip" v-if='bShowAlert' @click.self='closeAlert_tips'>
+            <div>
+                <div class="title alertContent">
+                    <div class='font-medium' v-if='msg == ""'>預約成功</div>
+                    <div class='font-medium' v-else>預約失敗</div>
+                    <div class="lineDirectionBlack shortLine"></div>
+                </div>
+                
+                <div class="alertContent bookingMsg">
+                    <img v-if='msg == ""' src="../../assets/img/check.png">
+                    <span v-else>{{msg}}</span>                    
+                </div>
+
+                <div class="backBtn alertContent" @click='closeAlert_tips'>
+                    <div class="back" v-if='bBooking' @click='closeAlert()'>回頁面</div>
+                    <div class="back" v-else>返回</div>
+                </div>              
+            </div>
+
+        </div>
+        <div class="loading" v-if='bLoading'>
+            <div>
+                <div class='alertContent'>Loading...</div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -70,23 +94,44 @@ export default {
             iHolidays: 0,
             iHolidayPrice: 0,
             iNormalDayPrice: 0,
-            iTotalPrice: 0
+            iTotalPrice: 0,
+            bShowAlert: false, // 控制回饋訊息視窗
+            bShowBooking: true, // 控制預約視窗
+            bLoading: false, // 控制 loading 中視窗
+            bBooking: false, // 是否送出 axios
+            msg: ''
         }
     },
     created(){
         this.getRoomId();
         this.getTomorrow();
         this.getPrice();
-        console.log(new Date(this.sTomorow).getDay())
     },
     computed:{
         ...mapState(['vRoomDetail']),
     },
     methods:{
-        ...mapActions(['bookRoom']),
-        // close alert
+        ...mapActions(['bookRoom', 'getAllRoomDetail']),
+        // 關掉整個 BookAlert
         closeAlert(){
             this.$emit('closeAlert', false);
+            this.closAlert_booking();
+        },
+        // 關掉提示視窗
+        closeAlert_tips(){
+            this.msg = '';
+            this.bShowAlert = false;
+        },
+        // 控制預約頁面
+        closAlert_booking(){
+            this.bShowBooking = !this.bShowBooking;
+        },
+        // 送出請求後執行
+        afterSubmit(){
+            this.bBooking = true;
+            this.bLoading = false;
+            this.closAlert_booking();
+            this.bShowAlert = true;
         },
         // calculation vTime between  sTimeStart from sTimeEnd
         calcDate(){
@@ -119,28 +164,70 @@ export default {
         },
         // booking room
         submitBooking(){
-            if( !this.sName ) return;
-            if( !this.sTel ) return;
-            if( !this.sTimeStart || !this.sTimeEnd || this.sTimeEnd < this.sTimeStart ) return;
-
+            // 檢查輸入框
+            const bChekInput = this.checkBookingInput();
+            if(!bChekInput) {
+                this.bBooking = false;
+                return;
+            }
+            this.bLoading = true;
             const data = {'id': this.iRoomId, 'name': this.sName, 'tel': this.sTel, 'date': this.vTime};
             this.bookRoom(data)
-            .then(()=>
-                console.log(111)
-            )
+            .then((rs)=>{
+                this.afterSubmit()
+                if(rs.data.success){ // 訂房成功
+                    // 重load訂房日期
+                    this.$emit('showBookingDate', rs.data.booking[0].date);
+                    this.getAllRoomDetail();
+                }
+            })
+            .catch( error => {
+                this.afterSubmit()
+                this.msg = error.response.data.message;
+            });
         },
+        // 檢查預定資料
+        checkBookingInput(){
+            // 檢查姓名
+            if( !this.sName ) {
+                this.bShowAlert = true;
+                this.msg = '請填入姓名'
+                return false;
+            }
+
+            // 檢查電話
+            const regTel1 = /[0-9]{10}/.test(this.sTel);//帶區號的固定電話
+            const regTel2 = /[0-9]{9}/.test(this.sTel);//不帶區號的固定電話
+            if( !this.sTel) {
+                this.bShowAlert = true;
+                this.msg = '請填入電話號碼'
+                return false;
+            }else if(!(regTel1 || regTel2)){
+                this.bShowAlert = true;
+                this.msg = '電話號碼至少9碼(市內電話需加上區碼)'
+                return false;
+            }
+
+            // 檢查預約日期
+            if( !this.sTimeStart || !this.sTimeEnd || this.sTimeEnd < this.sTimeStart ) {
+                this.bShowAlert = true;
+                this.msg = '請確認日期是否正確';
+                return false;
+            }
+
+            return true;
+        },
+        // 得到該房間 ID
         getRoomId(){
             this.iRoomId = this.vRoomDetail[this.id].room[0].id;
         },
         getTomorrow(){
             let today = new Date();
             this.sTomorow = this.addDate(today, 1);
-            console.log(this.sTomorow);
         },
         // calculation weekDay
         calcuWeekDays(date){
             let iWeekDays = new Date(date).getDay();
-            console.log(iWeekDays, date)
             if( iWeekDays > 0 && iWeekDays < 6 ){
                 this.iNormalDays++;
             }else{
@@ -157,29 +244,17 @@ export default {
             this.iNormalDayPrice = this.vRoomDetail[this.id].room[0].normalDayPrice;
         },
         calcPrice(){
-            console.log(this.iHolidayPrice, this.iHolidays)
-            console.log(this.iNormalDayPrice, this.iNormalDays)
             this.iTotalPrice = this.iHolidayPrice * this.iHolidays + this.iNormalDayPrice * this.iNormalDays;
         }
     },
     watch:{
-        sName(){
-            console.log(this.sName);
-        },
-        sTel(){
-            console.log(this.sTel);
-        },
         sTimeEnd(){
-            console.log(this.sTimeEnd);
             this.resetWeekDays();
             this.calcDate();
             this.calcPrice();
-            console.log(this.iNormalDays);
-            console.log(this.iHolidays);
         },
         sTimeStart(){
             this.sTimeEnd = this.sTimeEnd !== '' ? this.sTimeEnd : this.sTimeStart;
-            console.log(this.sTimeStart);
             this.resetWeekDays();
             this.calcDate();
             this.calcPrice();
@@ -191,7 +266,9 @@ export default {
 
 <style lang="scss">
     // BookAlert
-    .bookAlert{
+    .bookAlert,
+    .tooltip,
+    .loading{
         width: 100vw;
         position: fixed;
         top: 0;
@@ -209,6 +286,11 @@ export default {
             padding: 27px 0;
             box-sizing: border-box;
         }
+    }
+    .loading{
+        &>div{
+            width: auto;
+        } 
     }
     .title{
         margin-bottom: 35px;
@@ -302,7 +384,8 @@ export default {
         }
     }
 
-    .submit{
+    .submit,
+    .back{
         background: $color-nine;
         color: $color-master;
         &:hover{
@@ -310,9 +393,30 @@ export default {
         }
     }
 
-
     .alertContent{
         padding-left: 42px;
         padding-right: 42px;
+    }
+
+    .bookingMsg{
+        color: $color-15;
+        margin-bottom: 35px;
+        img{
+            display: block;
+            margin: 0 auto;
+            width: 60px;
+        }
+    }
+
+    .backBtn{
+        display: flex;
+        justify-content: flex-end;
+        div{
+            display: inline-block;
+            padding: 9px 24px;
+            transition: all .3s;
+            font-size: $fontsize-xs;
+            @include pointer;
+        }
     }
 </style>

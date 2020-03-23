@@ -103,7 +103,7 @@ export default {
         img{
             max-height: 90vh;
             min-width: auto;
-            max-width: 50vw;
+            max-width: 65vw;
             height: auto;
         }
     }
@@ -136,5 +136,8 @@ export default {
         font-size: $fontsize-xs;
         margin-top: 10px;
         letter-spacing: $letter-spc-xs;
+        @include s420{
+            flex-direction: column;
+        }
     }
 </style>
