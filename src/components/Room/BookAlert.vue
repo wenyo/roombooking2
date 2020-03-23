@@ -17,7 +17,7 @@
                         <input type="text" class='inputStyle' v-model='sTel'>
                     </label>
                     <label>
-                        <span class='font-medium'>預約起迄</span>
+                        <span class='font-medium dateLabel'>預約起迄</span>
                         <div class="timeInput inputStyle">
                             <input type="date" value='2020-03-20' v-model='sTimeStart' :min='sTomorow'>
                             <span>~</span>
@@ -111,7 +111,7 @@ export default {
         ...mapState(['vRoomDetail']),
     },
     methods:{
-        ...mapActions(['bookRoom', 'getAllRoomDetail']),
+        ...mapActions(['bookRoom', 'getRoomDetail']),
         // 關掉整個 BookAlert
         closeAlert(){
             this.$emit('closeAlert', false);
@@ -178,12 +178,14 @@ export default {
                 if(rs.data.success){ // 訂房成功
                     // 重load訂房日期
                     this.$emit('showBookingDate', rs.data.booking[0].date);
-                    this.getAllRoomDetail();
+                    this.getRoomDetail(this.id);
                 }
             })
             .catch( error => {
-                this.afterSubmit()
-                this.msg = error.response.data.message;
+                if (error.response) {
+                    this.afterSubmit()
+                    this.msg = error.response.data.message;
+                }
             });
         },
         // 檢查預定資料
@@ -325,6 +327,11 @@ export default {
             }
         }
     }
+    label span.dateLabel{
+        @include s420{
+            white-space: unset;
+        }
+    }
     .timeInput{
         display: flex;
         justify-content: space-between;
@@ -373,6 +380,9 @@ export default {
             transition: all .3s;
             font-size: $fontsize-xs;
             @include pointer;
+            @include s420{
+                padding: 9px 10px;
+            }
         }
     }
 

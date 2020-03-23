@@ -8,9 +8,17 @@
                     <img :src='vRoom.imageUrl'>
                     <div class="roomInfo">
                         <div class="name">{{vRoom.name}}</div>
-                        <div class="price">
-                            <div class="normalDayPrice">NT.{{vRoom.normalDayPrice}}<span class='smallFont day'>平日</span></div>
-                            <div class="holidayPrice smallFont">NT.{{vRoom.holidayPrice}}<span class='day smallFont'>假日</span></div>
+                        <div class="price" :class='checkWeekDay()? "" : "priceReverse" '>
+                            <div class="normalDayPrice" 
+                                :class='checkWeekDay()? "bigFont" : "" '>
+                                <span>NT.{{vRoom.normalDayPrice}}</span>
+                                <span class='smallFont day'>平日</span>
+                            </div>
+                            <div class="holidayPrice"  
+                                :class='checkWeekDay()? "" : "bigFont" '>
+                                <span>NT.{{vRoom.holidayPrice}}</span>
+                                <span class='day smallFont'>假日</span>
+                            </div>
                         </div>
                     </div>
                     </router-link>
@@ -23,9 +31,20 @@
 <script>
 import { mapState } from 'vuex';
 export default {
+    data(){
+        return{
+            iWeekDay: new Date().getDay(),
+        }
+    },
     computed:{
         ...mapState([ 'vAllRoomData', 'bGetAllData' ]),
     },
+    methods:{
+        // 平日就返回 true
+        checkWeekDay(){
+            return (this.iWeekDay > 0 || this.iWeekDay < 6);
+        }
+    }
 }
 </script>
 
@@ -82,13 +101,6 @@ export default {
         div{
             color: $color-nine;
         }
-        .smallFont{
-            font-size: $fontsize-xs;
-            color: $color-ele;
-        }
-        .normalDayPrice{
-            font-size: $fontsize-m;
-        }
     }
     .day{
         margin-left: 5px;
@@ -98,6 +110,16 @@ export default {
         justify-content: space-between;
         align-items: flex-end;
         margin-top: 23px;
+        .smallFont{
+            font-size: $fontsize-xs;
+            color: $color-ele;
+        }
+        .bigFont{
+            font-size: $fontsize-m;
+        }
+    }
+    .priceReverse{
+        flex-direction: row-reverse;
     }
     .room {
         @include pointer;

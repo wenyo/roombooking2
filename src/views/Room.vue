@@ -3,9 +3,11 @@
         <LightBox :give-show-img='imgIdx' @closeImg='resetShowImg'></LightBox>
         <LogoBlack></LogoBlack>
         <RoomImg @iShowImg='getShowImg'></RoomImg>
-        <RoomDetail></RoomDetail>
-        <Canlendar @sendBookAlert='getBookAlert'
-                    :add-date='addDate'></Canlendar>
+        <div class="roomContent content">
+            <RoomDetail></RoomDetail>
+            <Canlendar @sendBookAlert='getBookAlert'
+                        :add-date='addDate'></Canlendar>            
+        </div>
         <BookAlert v-if='bShowBook' 
                     @closeAlert='getBookAlert'
                     @showBookingDate='addBookingDate'></BookAlert>
@@ -52,3 +54,15 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+    .roomContent{
+        margin-top: 90vh;
+        display: flex;
+        justify-content: space-between;
+        @include s768{
+            flex-direction: column-reverse;
+            align-items: center;
+        }
+    }
+</style>

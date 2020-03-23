@@ -1,13 +1,26 @@
 <template>
-    <div class='RoomDetail content detailPageContent font-light' v-if='bGetAllDetails'>
+    <div class='detailPageContent font-light' v-if='bGetAllDetails'>
         <h3 class="roomName font-medium">{{vThisRoom.name}}</h3>
             <div class="thisRoomInfo">
-                <ul>
-                    <li>房客人數限制： {{vThisRoom.descriptionShort.GuestMin}}~{{vThisRoom.descriptionShort.GuestMax}} 人</li>
-                    <li>床型：{{vThisRoom.descriptionShort.Bed[0]}}</li>
-                    <li>衛浴數量： {{vThisRoom.descriptionShort['Private-Bath']}} 間</li>
-                    <li>房間大小： {{vThisRoom.descriptionShort.Footage}} 平方公尺</li>
-                </ul>
+                <div class="roomCondition">
+                    <ul>
+                        <li>房客人數限制： {{vThisRoom.descriptionShort.GuestMin}}~{{vThisRoom.descriptionShort.GuestMax}} 人</li>
+                        <li>床型：{{vThisRoom.descriptionShort.Bed[0]}}</li>
+                        <li>衛浴數量： {{vThisRoom.descriptionShort['Private-Bath']}} 間</li>
+                        <li>房間大小： {{vThisRoom.descriptionShort.Footage}} 平方公尺</li>
+                    </ul>
+                    <ul class="priceDetail" ref='price'>
+                        <li class="regular" ref='regularDay'>
+                            <div>NT.{{vThisRoom.normalDayPrice}}</div>
+                            <span>平日(一~四)</span>
+                        </li>
+                        <li class="holiday" ref='holiday'>
+                            <div>NT.{{vThisRoom.holidayPrice}}</div>
+                            <span>假日(五~日)</span>
+                        </li>
+                    </ul>
+                </div>
+
                 <p>{{vThisRoom.description}}</p>
                 
                 <div class="lineDirectionBlack separationLine"></div>
@@ -71,17 +84,6 @@
                     <li :class="vEquipment[11]">
                         <i class="fas fa-dog"></i>
                         <span>寵物攜帶</span>
-                    </li>
-                </ul>
-
-                <ul class="priceDetail" ref='price'>
-                    <li class="regular" ref='regularDay'>
-                        <div>NT.{{vThisRoom.normalDayPrice}}</div>
-                        <span>平日(一~四)</span>
-                    </li>
-                    <li class="holiday" ref='holiday'>
-                        <div>NT.{{vThisRoom.holidayPrice}}</div>
-                        <span>假日(五~日)</span>
                     </li>
                 </ul>
             </div>
@@ -151,10 +153,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .RoomDetail{
-        margin-top: 90vh;
-    }
 
+    .detailPageContent{
+        @include s768{
+            margin-top: 30px;
+        }
+    }
     // ROOM INFO
     .roomName{
         font-size: $fontsize-xl;
@@ -163,10 +167,9 @@ export default {
 
     .thisRoomInfo{
         position: relative;
-        // margin: 30px 0;
         width: 50vw;
-        ul{
-            margin: 30px 0;
+        @include s768{
+            width: 90vw;
         }
         li{
             margin: 10px 0;
@@ -177,7 +180,15 @@ export default {
             text-align: justify;
             line-height: $line-h-master;
             font-size: $fontsize-xxs;
+            @include s768{
+                width: 90vw;
+            }
         }
+    }
+    .roomCondition{
+        display: flex;
+        justify-content: space-between;
+        margin: 30px 0;
     }
 
     .separationLine{
@@ -209,6 +220,7 @@ export default {
     // EQUIPMENT
     .equipment{
         width: 100%;
+        margin-top: 30px;
         padding: 5%;
         background-color: $color-six;
 
@@ -231,13 +243,14 @@ export default {
     // PRICE
     ul.priceDetail{
         margin: 0;
+        height: fit-content;
         text-align: right;
         font-size: $fontsize-xs;
         letter-spacing: $letter-spc-xs;
 
-        position: absolute;
-        top: 0;
-        right: 20px;
+        // position: absolute;
+        // top: 0;
+        // right: 20px;
 
         display: inline-flex;
         flex-direction: column;

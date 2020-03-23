@@ -51,7 +51,8 @@ export default new Vuex.Store({
       })
     },
     // 得到個別房間細節資料
-    getRoomDetail({ commit, state }, {idx, id}){
+    getRoomDetail({ commit, state }, {idx}){
+      const id = state.vAllRoomData[idx].id;
       const URL_DETAIL = state.URL_AJAX_SLASH + id;
       return axios.get( URL_DETAIL, {
           headers: {
@@ -70,8 +71,7 @@ export default new Vuex.Store({
     // 得到所有房間細節
     getAllRoomDetail({ state, dispatch }){
       for (const idx in state.vAllRoomData) {
-        let id = state.vAllRoomData[idx].id;
-        dispatch('getRoomDetail', {idx, id})
+        dispatch('getRoomDetail', {idx})
       }
     },
     // 預約房型
@@ -90,5 +90,4 @@ export default new Vuex.Store({
       })
     }
   },
-  modules: {}
 });

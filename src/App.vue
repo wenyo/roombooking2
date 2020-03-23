@@ -1,12 +1,16 @@
 <template>
   <div id="app">
     <router-view />
+    <Foot></Foot>
   </div>
 </template>
+
 <script>
+import Foot from './views/Foot'
 import { mapActions } from 'vuex';
 
 export default {
+    components: { Foot },
     created(){
         this.getAllRoom();
     },

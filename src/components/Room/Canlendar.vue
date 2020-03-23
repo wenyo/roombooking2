@@ -140,13 +140,23 @@ export default {
 <style lang="scss">
 
     // CALENDAR
-    
     .booking{
-        position: absolute;
-        top: 100vh;
-        right: 5vw;
+        display: flex;
+        height: fit-content;
+        flex-direction: column;
+        @include s768{
+            margin-top: 20px;
+            flex-direction: row;
+            width: 90vw;
+            align-items: flex-end;
+        }
+        @include s420{
+            flex-direction: column;
+            width: 95vw;
+            margin-top: 30px;
+            align-items: flex-start;
+        }
     }
-
     .calendar{
         background-color: $color-egh;
         width: 300px;
@@ -187,6 +197,16 @@ export default {
         position: relative;
         display: inline-block;
         margin-top: 26px;
+        width: 116px;
+        height: 54px;
+        @include s768{
+            margin-top: 0;
+            margin-left: 30px;
+        }
+        @include s420{
+            margin-top: 26px;
+            margin-left: 0;
+        }
         input{
             border: none;
             font-size: $fontsize-xs;
