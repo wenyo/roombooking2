@@ -50,12 +50,7 @@ export default {
 
 <style lang="scss">
     .roomListPage{
-        position: absolute;
-        top: 60vh;
-        width: 100%;
-        @include s768{
-            top: 70vh;
-        }
+        margin-top: -100px;
     }
 
     .roomList{

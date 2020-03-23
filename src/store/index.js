@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+import axios from "axios";
+import VueAxios from "vue-axios";
 
 const VUE_APP_TOKEN = 'Bearer 2hhirFH88rqb9AXPumSpm4Cwvk9Z9rx6xxICFY2E1q8SIKEgLZhGbqqrpzdc';
 const URL_AJAX = 'https://challenge.thef2e.com/api/thef2e2019/stage6/rooms';
@@ -46,9 +46,6 @@ export default new Vuex.Store({
         commit('addAllRoomData', res.data.items);
         dispatch('getAllRoomDetail');
       })
-      .catch( error => {
-        console.warn(error);
-      })
     },
     // 得到個別房間細節資料
     getRoomDetail({ commit, state }, {idx}){
@@ -64,9 +61,6 @@ export default new Vuex.Store({
       .then(res => {
           commit('getRoomDetailArray', {res, idx});
         })
-      .catch( error => {
-          console.warn(error);
-      });
     },
     // 得到所有房間細節
     getAllRoomDetail({ state, dispatch }){
