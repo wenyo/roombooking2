@@ -8,7 +8,7 @@
                 </a>
             </li>
             <li class="ui">
-                <a href="https://z7x2c0v0b8.github.io/the_f2e_2nd/hotel_reservation.html">
+                <a href="https://challenge.thef2e.com/user/1600?fbclid=IwAR2oYLpm_gLo5RI6AHXnqH9iIrWTMZzbMBLE4Qrfz0JQJw9jR2lNoHVOypI">
                     <i class="fas fa-pencil-ruler"></i>
                     <span>edith.hsu</span>
                 </a>
