@@ -1,8 +1,8 @@
 <template>
     <div class='header'>
-        <div class="content mainContent">
-            <div class="blackOverlayOpacity"></div>
-            <div class="roomImg" v-if='bannerImg !== ""'>
+        <div class="content mainContent height">
+            <div class="blackOverlayOpacity height"></div>
+            <div class="roomImg height" v-if='bannerImg !== ""'>
                 <img :src="bannerImg">
             </div>
             <div class="info">
@@ -72,9 +72,10 @@ export default {
 
 <style lang="scss">
     /*-------HOMEPAGE SETTING-------*/
-
+    .height{
+        height: 75vh;
+    }
     .mainContent{
-        height: 85vh;
         width: 100vw;
         display: inline-flex;
         flex-direction: column;
@@ -85,7 +86,6 @@ export default {
     .blackOverlayOpacity{
         position: absolute;
         top:0;
-        bottom: 15vh;
         right:0;
         left:0;
         background: linear-gradient(180deg, $color-sec 0%, $color-thir 100%);
@@ -94,7 +94,6 @@ export default {
 
     .roomImg{
         width: 100vw;
-        height: 85vh;
         @include over-hidden;
 
         position: absolute;
@@ -106,8 +105,8 @@ export default {
         img{
             height: auto;
             width: 120%;
-            position: absolute;
-            bottom: 0;
+            // position: absolute;
+            // bottom: 0;
             @include s768{
                 min-height: 120%;
                 max-height: 140%;

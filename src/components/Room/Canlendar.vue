@@ -53,7 +53,7 @@ export default {
     created(){
         this.iYearShow = this.iYearNow;
         this.iMonthShow = this.iMonthNow;
-        this.iTodayTimeOut = this.getTimeout(this.iYearNow, this.iMonthNow, this.iToday)
+        this.iTodayTimeOut = this.getTimeout(this.iYearNow, this.iMonthNow, this.iToday);
         this.getMonth(this.iYearShow, this.iMonthShow);
     },
     mounted(){
@@ -93,14 +93,17 @@ export default {
         },
         // 得到時間戳記
         getTimeout(iYear, iMonth, iDate){
-            const sDate = `${iYear}-${iMonth+1}-${iDate}`; // string date: month+1
+            iMonth = iMonth+1;
+            iMonth = iMonth < 10 ? '0'+iMonth : iMonth;
+            iDate = iDate < 10 ? '0'+iDate : iDate;
+            const sDate = `${iYear}-${iMonth}-${iDate}`; // string date: month+1
             const iDateTimeout = new Date(sDate).valueOf();
             return iDateTimeout;
         },
         // 檢查是否為過去日期 && 是否已訂房
         checkDate(iDate){
             const sDate = this.getDateString(iDate);
-            const iCheckdate = this.getTimeout(this.iYearShow, this.iMonthShow, iDate);
+            const iCheckdate = new Date(sDate).valueOf();
             let sClassName = this.iTodayTimeOut < iCheckdate ? '' : 'beforToday';
             sClassName = this.vThisRoomBooking.indexOf(sDate) > -1 ? sClassName + ' lineDirectionBlack' : sClassName;
             return sClassName;
