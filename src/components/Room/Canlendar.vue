@@ -20,7 +20,7 @@
         </div>
 
         <span class="bookingBtn" @click='showBookAlert()'>
-            <input type="submit" value="預約時段">
+            <div class="submit">預約時段</div>
             <div class="lineDirectionBlack right-line"></div>
             <div class="lineDirectionBlack bottom-line"></div>
         </span>
@@ -207,7 +207,7 @@ export default {
             margin-top: 26px;
             margin-left: 0;
         }
-        input{
+        .submit{
             border: none;
             font-size: $fontsize-xs;
             padding: 20px 30px;
