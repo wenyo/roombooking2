@@ -149,10 +149,10 @@ export default {
         // get time string format
         getTimeString(date){
             let sDate = date.getDate();
-            sDate =  sDate > 10 ? sDate : '0' + sDate;
+            sDate =  sDate >= 10 ? sDate : '0' + sDate;
 
             let sMonth = date.getMonth() + 1;
-            sMonth = sMonth > 10 ? sMonth : '0' + sMonth;
+            sMonth = sMonth >= 10 ? sMonth : '0' + sMonth;
 
             const sYear = date.getFullYear();
 
@@ -177,7 +177,7 @@ export default {
                 this.afterSubmit()
                 if(rs.data.success){ // 訂房成功
                     // 重load訂房日期
-                    this.$emit('showBookingDate', rs.data.booking[0].date);
+                    this.$emit('showBookingDate', rs.data.booking);                
                     this.getRoomDetail(this.id);
                 }
             })
@@ -247,7 +247,7 @@ export default {
         },
         calcPrice(){
             this.iTotalPrice = this.iHolidayPrice * this.iHolidays + this.iNormalDayPrice * this.iNormalDays;
-        }
+        },
     },
     watch:{
         sTimeEnd(){

@@ -227,7 +227,7 @@ export default {
         display: inline-flex;
         flex-direction: row;
         flex-wrap: wrap;
-        justify-content: space-around;
+        justify-content: flex-start;
         li{
             width: 135px;
             margin: 3% 0;

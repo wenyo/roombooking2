@@ -70,7 +70,6 @@ export default new Vuex.Store({
     },
     // 預約房型
     bookRoom({ state }, {id, name, tel, date}){
-      // bookRoom({state},{id, name, tel, date}){
       const URL_BOOKING = state.URL_AJAX_SLASH + id;
       return axios.post( URL_BOOKING, {
         name,

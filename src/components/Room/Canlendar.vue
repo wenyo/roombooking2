@@ -93,7 +93,7 @@ export default {
         },
         // 得到時間戳記
         getTimeout(iYear, iMonth, iDate){
-            iMonth = iMonth+1;
+            iMonth = iMonth + 1;
             iMonth = iMonth < 10 ? '0'+iMonth : iMonth;
             iDate = iDate < 10 ? '0'+iDate : iDate;
             const sDate = `${iYear}-${iMonth}-${iDate}`; // string date: month+1
@@ -124,8 +124,8 @@ export default {
         },
         // 得到 date string
         getDateString(iDate){
-            const sMonth = ((this.iMonthShow + 1) > 10) ? (this.iMonthShow + 1) : ('0' + (this.iMonthShow + 1));
-            const sDate = (iDate > 10) ? iDate : ('0' + iDate);
+            const sMonth = ((this.iMonthShow + 1) >= 10) ? (this.iMonthShow + 1) : ('0' + (this.iMonthShow + 1));
+            const sDate = (iDate >= 10) ? iDate : ('0' + iDate);
             return this.iYearShow + '-' + sMonth + '-' + sDate;
         }
     },
@@ -133,8 +133,10 @@ export default {
         bGetAllDetails(){
             this.getRoomBooking();
         },
-        addDate(date){
-            this.add_vThisRoomBooking(date);
+        addDate(vBooking){
+            for (const vBookInfo of vBooking) {
+                this.add_vThisRoomBooking(vBookInfo.date);                
+            }
         }
     }
 }

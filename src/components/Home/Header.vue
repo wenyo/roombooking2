@@ -72,6 +72,10 @@ export default {
 
 <style lang="scss">
     /*-------HOMEPAGE SETTING-------*/
+    .header{
+        display: flex;
+        justify-content: center;
+    }
     .height{
         height: 75vh;
     }

@@ -50,6 +50,7 @@ export default {
 
 <style lang="scss">
     .roomListPage{
+        margin: 0 auto;
         margin-top: -100px;
     }
 
