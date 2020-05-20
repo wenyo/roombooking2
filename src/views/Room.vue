@@ -60,7 +60,6 @@ export default {
             }else{
                 this.sDate = '';
             }
-            console.log(sDate,1)
         },
         addBookingDate(date){
             this.addDate = date;
