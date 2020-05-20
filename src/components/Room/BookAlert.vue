@@ -19,9 +19,9 @@
                     <label>
                         <span class='font-medium dateLabel'>預約起迄</span>
                         <div class="timeInput inputStyle">
-                            <input type="date" value='2020-03-20' v-model='sTimeStart' :min='sTomorow'>
+                            <input type="date" v-model='sTimeStart' :min='sTomorow'>
                             <span>~</span>
-                            <input type="date" value='2020-03-30' v-model='sTimeEnd' :min='sTimeStart ? sTimeStart : sTomorow'>
+                            <input type="date" v-model='sTimeEnd' :min='sTimeStart ? sTimeStart : sTomorow'>
                         </div>
                     </label>
                 </div>
@@ -80,6 +80,7 @@
 import { mapState, mapActions } from 'vuex';
 
 export default {
+    props: ['getClickDate'],
     data(){
         return{
             id: this.$route.params.id,
@@ -106,6 +107,7 @@ export default {
         this.getRoomId();
         this.getTomorrow();
         this.getPrice();
+        this.getDateFromCanlendar();
     },
     computed:{
         ...mapState(['vRoomDetail']),
@@ -248,6 +250,12 @@ export default {
         calcPrice(){
             this.iTotalPrice = this.iHolidayPrice * this.iHolidays + this.iNormalDayPrice * this.iNormalDays;
         },
+        getDateFromCanlendar(){
+            if(this.getClickDate !== '' ){
+                this.sTimeStart = this.getClickDate;
+                this.sTimeEnd = this.getClickDate;
+            }
+        }
     },
     watch:{
         sTimeEnd(){
@@ -261,7 +269,7 @@ export default {
             this.calcDate();
             this.calcPrice();
             
-        },
+        }
     }
 }
 </script>

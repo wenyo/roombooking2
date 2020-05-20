@@ -14,6 +14,7 @@
                 <tr v-for='(vWeek, idx2) in vMonthDate' :key='idx2'>
                     <td v-for='(iDate, idx3) in vWeek' :key='idx3' 
                     :class="checkDate(iDate)"
+                    @click = 'clickDate(iDate)'
                 >{{iDate}}</td>
                 </tr>
             </table>
@@ -104,8 +105,10 @@ export default {
         checkDate(iDate){
             const sDate = this.getDateString(iDate);
             const iCheckdate = new Date(sDate).valueOf();
-            let sClassName = this.iTodayTimeOut < iCheckdate ? '' : 'beforToday';
-            sClassName = this.vThisRoomBooking.indexOf(sDate) > -1 ? sClassName + ' lineDirectionBlack' : sClassName;
+            let sBookingClass = this.vThisRoomBooking.indexOf(sDate) > -1 ? ' lineDirectionBlack' : '' ;
+            let sBefoeClass = this.iTodayTimeOut < iCheckdate ? '' : ' beforToday';
+            let sClassName = (sBookingClass + sBefoeClass);
+            sClassName = sClassName == '' ? 'bookingAble' :sClassName;
             return sClassName;
         },
         // 切換日曆
@@ -119,8 +122,16 @@ export default {
             this.getMonth(this.iYearShow ,this.iMonthShow);
         },
         // 發出顯示預約視窗
-        showBookAlert(){
-            this.$emit('sendBookAlert', true)
+        showBookAlert(sDate = ''){
+            this.$emit('sendBookAlert', sDate, true)
+        },
+        // 點擊日期出現預約視窗
+        clickDate(iDate){
+            const result = this.checkDate(iDate);
+            if(result == 'bookingAble'){
+                const sDate = this.getDateString(iDate);
+                this.showBookAlert(sDate);
+            }
         },
         // 得到 date string
         getDateString(iDate){
@@ -173,7 +184,13 @@ export default {
         td{
             padding: 10px 0;
             text-align: center;
+            transition: all .3s;
             @include pointer;
+            &.bookingAble:hover{
+                background: $color-ele;
+                border-radius: 3px;
+                color: $color-14;
+            }
         }
         .beforToday{
             color: $color-sev;

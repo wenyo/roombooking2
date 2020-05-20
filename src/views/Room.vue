@@ -8,7 +8,8 @@
             <Canlendar @sendBookAlert='getBookAlert'
                         :add-date='addDate'></Canlendar>            
         </div>
-        <BookAlert v-if='bShowBook' 
+        <BookAlert v-if='bShowBook'
+                    :get-click-date='sDate'
                     @closeAlert='getBookAlert'
                     @showBookingDate='addBookingDate'></BookAlert>
     </div>
@@ -32,8 +33,15 @@ export default {
             id: this.$route.params.id,
             imgIdx: -1,
             bShowBook: false,
-            addDate: ''
+            addDate: '',
+            sDate: '',
         }
+    },
+    created(){
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     },
     computed:{
         ...mapState(['bGetAllData']),
@@ -45,8 +53,14 @@ export default {
         resetShowImg(){
             this.imgIdx = -1;
         },
-        getBookAlert(bShow){
+        getBookAlert( sDate, bShow ){
             this.bShowBook = bShow;
+            if(bShow){
+                this.sDate = sDate;
+            }else{
+                this.sDate = '';
+            }
+            console.log(sDate,1)
         },
         addBookingDate(date){
             this.addDate = date;
