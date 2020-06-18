@@ -289,9 +289,10 @@ export default {
         display:flex;
         justify-content: center;
         align-items: center;
+        z-index: 11;
         &>div{
-            max-width: 423px;
-            width: 80%;
+            min-width: 300px;
+            width: 65%;
             background: $color-master;
             padding: 27px 0;
             box-sizing: border-box;
@@ -323,6 +324,11 @@ export default {
             margin-bottom: 20px;
             font-size: $fontsize-xs;
             letter-spacing: $letter-spc-xs;
+            @include s630{
+                flex-direction: column;
+                align-items: flex-start;
+                align-items: flex-start;
+            }
             &>span{
                 width: auto;
                 white-space:nowrap;
@@ -332,6 +338,14 @@ export default {
                 border-radius: 3px;
                 border: 1px solid $color-13;
                 border-radius: 3px;
+            }
+            .inputStyle{
+                @include s630{
+                    width: 100%;
+                    input{
+                        margin: 3px 0;
+                    }
+                }
             }
         }
     }
@@ -344,10 +358,20 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        @include s630{
+            flex-direction: column;
+            align-items: flex-start;
+            span{
+                display: none;
+            }
+        }
         input{
             width: 45%;
             &::-webkit-clear-button {
                 display: none;
+            }
+            @include s630{
+                width: 100%;
             }
         }
     }
